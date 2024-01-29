@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using FinalExam.Data;
 using FinalExam.Models;
+using FinalExam.Models.DepartmentViewModels;
 
 namespace FinalExam.Controllers
 {
@@ -15,29 +16,21 @@ namespace FinalExam.Controllers
         }
 
         // GET: DashBoard
-        //public async Task<IActionResult> Index()
-        //{
-        //    var viewModel = new WorkSpaceIndexData();
-        //    viewModel.WorkSpaces = await _context.WorkSpace
-        //        .Include(i => i.User)
-        //        .Include(i => i.WorkSpaceMembers)
-        //            .ThenInclude(i => i.User)
-        //        .Include(i => i.Boards)
-        //            .ThenInclude(i => i.Lists)
-        //                .ThenInclude(i => i.TaskItems)
-        //                    .ThenInclude(i => i.Comments)
-        //        .AsNoTracking()
-        //        .OrderBy(i => i.WorkSpaceId)
-        //        .ToListAsync();
-        //    viewModel.Users = await _context.User
-        //        .Include(i => i.WorkSpaceMembers)
-        //            .ThenInclude(i => i.WorkSpace)
-        //        .Include(i => i.WorkSpaces)
-        //        .AsNoTracking()
-        //        .OrderBy(i => i.LastName)
-        //        .ToListAsync();
+        public async Task<IActionResult> Index()
+        {
+            var viewModel = new DepartmentIndexData();
+            viewModel.Departments = await _context.Department
+                .Include(i => i.Users)
+                .AsNoTracking()
+                .OrderBy(i => i.DepartmentId)
+                .ToListAsync();
+            viewModel.Users = await _context.User
+                .Include(i => i.Department)
+                .AsNoTracking()
+                .OrderBy(i => i.ID)
+                .ToListAsync();
 
-        //    return View(viewModel);
-        //}
+            return View(viewModel);
+        }
     }
 }
