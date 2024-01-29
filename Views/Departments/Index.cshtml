@@ -1,0 +1,216 @@
+﻿@model FinalExam.Models.DepartmentViewModels.DepartmentIndexData
+
+@{
+    ViewData["Title"] = "Department Table";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Department Table</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active">Department Table</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    @*
+    //section("before_css")
+    //    include("components.admin.embedded.table_head")
+    *@
+    @*!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    //include("components.admin.tables.Department.content_header")
+    <!-- /.content-header -->
+    if(session()->has("add-success"))
+    <div class="alert alert-success" role="alert">
+    {{ session("add-success") }}
+    </div>
+    elseif(session()->has("edit-success"))
+    <div class="alert alert-info" role="alert">
+    {{ session("edit-success") }}
+    </div>
+    elseif(session()->has("delete-success"))
+    <div class="alert alert-danger" role="alert">
+    {{ session("delete-success") }}
+    </div>
+    endif*@
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="d-flex justify-content-between" style="margin-bottom: -2px">
+                                <a asp-action="Create" class="btn btn-success btn-md">
+                                    <i class="fas fa-plus">
+                                    </i>
+                                    Add new Department
+                                </a>
+                                <a class="btn btn-danger btn-md" href="admin/Department-trash">
+                                    <i class="fas fa-trash-alt">
+                                    </i>
+                                </a>
+                            </h3>
+                        </div>
+                        <!-- ./card-header -->
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Name</th>
+                                        <th>Code</th>
+                                        <th>Employees</th>
+                                        <th>Location</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var index = 0;
+                                    }
+                                    @foreach (var item in Model.Departments)
+                                    {
+                                        index++;
+                                        <tr>
+                                            <td>
+                                                @index
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.DepartmentName)
+                                            </td>
+                                            <td>
+                                                @item.DepartmentCode
+                                            </td>
+                                            <td>
+                                                @if (item.Users.Count() > 0)
+                                                {
+                                                    <!-- Trigger the modal with a button -->
+                                                    <a type="button" class="text text-info text-md" data-toggle="modal" data-target="#showDepartmentMember-@item.DepartmentId">
+                                                        <i class="fa fa-eye"></i>
+                                                        @item.Users.Count() Employees
+                                                    </a>
+
+                                                    <!-- Modal -->
+                                                    <div id="showDepartmentMember-@item.DepartmentId" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+
+                                                            <!-- Modal content-->
+                                                            <div class="modal-content" style="min-width: 700px; max-height: 600px">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Members in Department @item.DepartmentName</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body overflow-auto">
+                                                                    <table class="table table-bordered table-striped">
+                                                                        @{
+                                                                            var indexInModel = 0;
+                                                                        }
+                                                                        <tr>
+                                                                            <th>No.</th>
+                                                                            <th>Fullname</th>
+                                                                            <th>Rank</th>
+                                                                            <th colspan="2">Action</th>
+                                                                        </tr>
+
+                                                                        @foreach (var member in item.Users)
+                                                                        {
+                                                                            indexInModel++;
+                                                                            <tr>
+                                                                                <td>
+                                                                                    @indexInModel
+                                                                                </td>
+                                                                                <td>
+                                                                                    @member.FullName
+                                                                                </td>
+                                                                                <td>
+                                                                                    @member.Rank
+                                                                                </td>
+                                                                                <td>
+                                                                                    <a href="/Departments/Details/@member.ID" class="btn btn-secondary btn-sm">
+                                                                                        <i class="fas fa-eye">
+                                                                                        </i>
+                                                                                        Details
+                                                                                    </a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    </table>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </td>
+
+                                            <td>
+                                                @item.Location
+                                            </td>
+                                            <td>
+                                                <a asp-action="Details" asp-route-id="@item.DepartmentId" class="btn btn-secondary btn-sm">
+                                                    <i class="fas fa-eye">
+                                                    </i>
+                                                    Details
+                                                </a>
+                                                <a asp-action="Edit" asp-route-id="@item.DepartmentId" class="btn btn-info btn-sm">
+                                                    <i class="fas fa-pencil-alt">
+                                                    </i>
+                                                    Edit
+                                                </a>
+                                                <a asp-action="Delete" asp-route-id="@item.DepartmentId" class="btn">
+                                                    <button class="btn btn-danger btn-sm" style="margin-left: -12px" type="submit">
+                                                        <i class="fas fa-trash">
+                                                        </i>
+                                                        Delete
+                                                    </button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Name</th>
+                                        <th>Code</th>
+                                        <th>Employees</th>
+                                        <th>Location</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+@*@endsection
+@section("after_js")
+    @include("components.admin.embedded.table_script")
+@endsection*@

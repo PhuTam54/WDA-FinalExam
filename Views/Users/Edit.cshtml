@@ -1,0 +1,79 @@
+﻿@model FinalExam.Models.User
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h4 class="p-3">Users</h4>
+<div class="row">
+    <!-- Main content -->
+    <section class="content">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title">Edit User</h3>
+                            </div>
+                            <div class="card-body d-flex">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="DepartmentId" class="control-label"></label>
+                                        <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select>
+                                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Avatar" class="control-label"></label>
+                                        <input asp-for="Avatar" class="form-control" />
+                                        <span asp-validation-for="Avatar" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="EmployeeCode" class="control-label"></label>
+                                        <input asp-for="EmployeeCode" class="form-control" />
+                                        <span asp-validation-for="EmployeeCode" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Rank" class="control-label"></label>
+                                        <input asp-for="Rank" class="form-control" />
+                                        <span asp-validation-for="Rank" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="LastName" class="control-label"></label>
+                                        <input asp-for="LastName" class="form-control" />
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="FirstMidName" class="control-label"></label>
+                                        <input asp-for="FirstMidName" class="form-control" />
+                                        <span asp-validation-for="FirstMidName" class="text-danger"></span>
+                                    </div>
+                                    <!-- /.form group -->
+                                </div>
+
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                        <input type="submit" value="Edit" class="btn btn-info float-right" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+    <!-- /.content -->
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

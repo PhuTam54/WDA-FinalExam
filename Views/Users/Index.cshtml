@@ -1,0 +1,154 @@
+﻿@model FinalExam.Models.DepartmentViewModels.DepartmentIndexData
+
+@{
+    ViewData["Title"] = "User Table";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>User Table</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active">User Table</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    @*
+    //section("before_css")
+    //    include("components.admin.embedded.table_head")
+    *@
+    @*!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    //include("components.admin.tables.user.content_header")
+    <!-- /.content-header -->
+    if(session()->has("add-success"))
+    <div class="alert alert-success" role="alert">
+    {{ session("add-success") }}
+    </div>
+    elseif(session()->has("edit-success"))
+    <div class="alert alert-info" role="alert">
+    {{ session("edit-success") }}
+    </div>
+    elseif(session()->has("delete-success"))
+    <div class="alert alert-danger" role="alert">
+    {{ session("delete-success") }}
+    </div>
+    endif*@
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="d-flex justify-content-between" style="margin-bottom: -2px">
+                                <a asp-action="Create" class="btn btn-success btn-md">
+                                    <i class="fas fa-plus">
+                                    </i>
+                                    Add new User
+                                </a>
+                                <a class="btn btn-danger btn-md" href="admin/user-trash">
+                                    <i class="fas fa-trash-alt">
+                                    </i>
+                                </a>
+                            </h3>
+                        </div>
+                        <!-- ./card-header -->
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Avatar</th>
+                                        <th>Name</th>
+                                        <th>Rank</th>
+                                        <th>Department</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var index = 0;
+                                    }
+                                    @foreach (var item in Model.Users)
+                                    {
+                                        index++;
+                                        <tr>
+                                            <td>
+                                                @index
+                                            </td>
+                                            <td>
+                                                <img src="@Html.DisplayFor(modelItem => item.Avatar)" width="50" alt="img">
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FullName)
+                                            </td>
+                                            <td>
+                                                @item.Rank
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Department.DepartmentName)
+                                            </td>
+                                            <td>
+                                                <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-secondary btn-sm">
+                                                    <i class="fas fa-eye">
+                                                    </i>
+                                                    Details
+                                                </a>
+                                                <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-info btn-sm">
+                                                    <i class="fas fa-pencil-alt">
+                                                    </i>
+                                                    Edit
+                                                </a>
+                                                <a asp-action="Delete" asp-route-id="@item.ID" class="btn">
+                                                    <button class="btn btn-danger btn-sm" style="margin-left: -12px" type="submit">
+                                                        <i class="fas fa-trash">
+                                                        </i>
+                                                        Delete
+                                                    </button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Avatar</th>
+                                        <th>Name</th>
+                                        <th>Rank</th>
+                                        <th>Department</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+@*@endsection
+@section("after_js")
+    @include("components.admin.embedded.table_script")
+@endsection*@
