@@ -28,29 +28,36 @@ public static class SeedData
              {
                 new Department
                 {
+                    DepartmentName = "Default Department",
+                    DepartmentCode = "Default",
+                    Location = "Default",
+                    NumberOfEmployees = 0,
+                },
+                new Department
+                {
                     DepartmentName = "Accounting Department",
-                    DepartmentCode = "Description For Group1's Department",
+                    DepartmentCode = "A",
                     Location = "Hanoi",
                     NumberOfEmployees = 1,
                 },
                 new Department
                 {
                     DepartmentName = "Production Management Department",
-                    DepartmentCode = "Description For Group2's Department",
+                    DepartmentCode = "PM",
                     Location = "Hanoi",
                     NumberOfEmployees = 2,
                 },
                 new Department
                 {
                     DepartmentName = "Human Resources Department",
-                    DepartmentCode = "Description For Department number 3",
+                    DepartmentCode = "HM",
                     Location = "Saigon",
                     NumberOfEmployees = 1,
                 },
                 new Department
                 {
                     DepartmentName = "IT Department",
-                    DepartmentCode = "Description For Department number 4",
+                    DepartmentCode = "IT",
                     Location = "Hanoi",
                     NumberOfEmployees = 2,
                 }
@@ -65,7 +72,7 @@ public static class SeedData
             {
                 new User
                 {
-                    DepartmentId = 1,
+                    DepartmentId = 2,
                     EmployeeCode = "phutam",
                     Rank = "1",
                     FirstMidName = "Tam",
@@ -74,18 +81,63 @@ public static class SeedData
                 },
                 new User
                 {
-                    DepartmentId = 4,
+                    DepartmentId = 5,
                     EmployeeCode = "tranthuy",
-                    Rank = "23",
+                    Rank = "2",
                     FirstMidName = "Thuy",
                     LastName = "Tran",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
-                    DepartmentId = 2,
+                    DepartmentId = 3,
                     EmployeeCode = "peter",
+                    Rank = "3",
+                    FirstMidName = "Peter",
+                    LastName = "Parker",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                },
+                new User
+                {
+                    DepartmentId = 2,
+                    EmployeeCode = "tom",
+                    Rank = "4",
+                    FirstMidName = "Tom",
+                    LastName = "Holland",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                },
+                new User
+                {
+                    DepartmentId = 4,
+                    EmployeeCode = "ronaldo",
                     Rank = "5",
+                    FirstMidName = "Cristiano",
+                    LastName = "Ronaldo",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                },
+                new User
+                {
+                    DepartmentId = 1,
+                    EmployeeCode = "phutam2",
+                    Rank = "1",
+                    FirstMidName = "Tam",
+                    LastName = "Phu",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                },
+                new User
+                {
+                    DepartmentId = 1,
+                    EmployeeCode = "tranthuy2",
+                    Rank = "2",
+                    FirstMidName = "Thuy",
+                    LastName = "Tran",
+                    Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
+                },
+                new User
+                {
+                    DepartmentId = 1,
+                    EmployeeCode = "peter2",
+                    Rank = "3",
                     FirstMidName = "Peter",
                     LastName = "Parker",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
@@ -93,21 +145,22 @@ public static class SeedData
                 new User
                 {
                     DepartmentId = 1,
-                    EmployeeCode = "tom",
-                    Rank = "7",
+                    EmployeeCode = "tom2",
+                    Rank = "4",
                     FirstMidName = "Tom",
                     LastName = "Holland",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
                 new User
                 {
-                    DepartmentId = 3,
-                    EmployeeCode = "ronaldo",
-                    Rank = "9",
+                    DepartmentId = 1,
+                    EmployeeCode = "ronaldo2",
+                    Rank = "5",
                     FirstMidName = "Cristiano",
                     LastName = "Ronaldo",
                     Avatar = "https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg",
                 },
+
             };
             foreach (User s in Users)
             {
@@ -115,7 +168,7 @@ public static class SeedData
             }
             context.SaveChanges();
 
-            
+
         }
     }
 }

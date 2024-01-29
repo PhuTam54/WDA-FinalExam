@@ -29,6 +29,11 @@ namespace FinalExam.Controllers
                 .AsNoTracking()
                 .OrderByDescending(i => i.DepartmentId)
                 .ToListAsync();
+            viewModel.Users = await _context.User
+                .AsNoTracking()
+                .Where(i => i.DepartmentId == 1)
+                .OrderByDescending(i => i.ID)
+                .ToListAsync();
 
             return View(viewModel);
         }
@@ -124,6 +129,50 @@ namespace FinalExam.Controllers
             return View(department);
         }
 
+        // POST: Departments/AddEmployee/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddEmployee(int id, [Bind("ID,EmployeeCode,Rank,LastName,FirstMidName,Avatar")] User user, int DepartmentId)
+        {
+            if (user is null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            if (true)
+            {
+                try
+                {
+                    user.DepartmentId = DepartmentId;
+                    // Lưu thay đổi vào cơ sở dữ liệu
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(user.ID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["DepartmentId"] = new SelectList(_context.Set<Department>(), "DepartmentId", "DepartmentCode", user.DepartmentId);
+            return View(user);
+        }
+
+
+        private bool UserExists(int iD)
+        {
+            throw new NotImplementedException();
+        }
+
         // GET: Departments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -156,14 +205,14 @@ namespace FinalExam.Controllers
             {
                 _context.Department.Remove(department);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool DepartmentExists(int id)
         {
-          return (_context.Department?.Any(e => e.DepartmentId == id)).GetValueOrDefault();
+            return (_context.Department?.Any(e => e.DepartmentId == id)).GetValueOrDefault();
         }
     }
 }

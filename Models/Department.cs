@@ -11,7 +11,7 @@ public class Department
     [Required]
     public string? DepartmentName { get; set; }
 
-    [StringLength(255, MinimumLength = 3)]
+    [StringLength(50)]
     [Required]
     public string? DepartmentCode { get; set; }
 

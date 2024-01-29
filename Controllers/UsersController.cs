@@ -8,16 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using FinalExam.Data;
 using FinalExam.Models;
 using FinalExam.Models.DepartmentViewModels;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Hosting.Internal;
 
 namespace FinalExam.Controllers
 {
     public class UsersController : Controller
     {
         private readonly FinalExamContext _context;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public UsersController(FinalExamContext context)
+        public UsersController(FinalExamContext context, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         // GET: Users
@@ -54,7 +58,7 @@ namespace FinalExam.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
-            ViewData["DepartmentId"] = new SelectList(_context.Set<Department>(), "DepartmentId", "DepartmentCode");
+            ViewData["DepartmentId"] = new SelectList(_context.Set<Department>(), "DepartmentId", "DepartmentName");
             return View();
         }
 
@@ -63,15 +67,41 @@ namespace FinalExam.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,DepartmentId,Avatar,EmployeeCode,Rank,LastName,FirstMidName")] User user)
+        public async Task<IActionResult> Create([Bind("ID,DepartmentId,EmployeeCode,Rank,LastName,FirstMidName")] User user, IFormFile Avatar)
         {
             if (true)
             {
+                var allowedExtenstions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+
+                var filePaths = new List<string>();
+                // Check if the file has a valid extensions
+                var fileExtension = Path.GetExtension(Avatar.FileName).ToLowerInvariant();
+                if (string.IsNullOrEmpty(fileExtension) || !allowedExtenstions.Contains(fileExtension))
+                {
+                    return BadRequest("Invalid file extension. Allowed extensions are: " + string.Join(", ", allowedExtenstions));
+                };
+
+                if (Avatar.Length > 0)
+                {
+                    // Change the folder path
+                    var uploadFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+                    Directory.CreateDirectory(uploadFolderPath);
+
+                    var fileName = Path.GetRandomFileName() + fileExtension;
+                    var filePath = Path.Combine(uploadFolderPath, fileName);
+                    filePaths.Add(filePath);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await Avatar.CopyToAsync(stream);
+                    }
+
+                    user.Avatar = "/uploads/" + fileName;
+                }
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Set<Department>(), "DepartmentId", "DepartmentCode", user.DepartmentId);
             return View(user);
         }
 
@@ -88,7 +118,7 @@ namespace FinalExam.Controllers
             {
                 return NotFound();
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Set<Department>(), "DepartmentId", "DepartmentCode", user.DepartmentId);
+            ViewData["DepartmentId"] = new SelectList(_context.Set<Department>(), "DepartmentId", "DepartmentName", user.DepartmentId);
             return View(user);
         }
 
@@ -97,7 +127,7 @@ namespace FinalExam.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,DepartmentId,Avatar,EmployeeCode,Rank,LastName,FirstMidName")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,DepartmentId,EmployeeCode,Rank,LastName,FirstMidName")] User user, IFormFile Avatar)
         {
             if (id != user.ID)
             {
@@ -106,6 +136,33 @@ namespace FinalExam.Controllers
 
             if (true)
             {
+                var allowedExtenstions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+
+                var filePaths = new List<string>();
+                // Check if the file has a valid extensions
+                var fileExtension = Path.GetExtension(Avatar.FileName).ToLowerInvariant();
+                if (string.IsNullOrEmpty(fileExtension) || !allowedExtenstions.Contains(fileExtension))
+                {
+                    return BadRequest("Invalid file extension. Allowed extensions are: " + string.Join(", ", allowedExtenstions));
+                };
+
+                if (Avatar.Length > 0)
+                {
+                    // Change the folder path
+                    var uploadFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+                    Directory.CreateDirectory(uploadFolderPath);
+
+                    var fileName = Path.GetRandomFileName() + fileExtension;
+                    var filePath = Path.Combine(uploadFolderPath, fileName);
+                    filePaths.Add(filePath);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await Avatar.CopyToAsync(stream);
+                    }
+
+                    user.Avatar = "/uploads/" + fileName;
+                }
                 try
                 {
                     _context.Update(user);
@@ -124,7 +181,7 @@ namespace FinalExam.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Set<Department>(), "DepartmentId", "DepartmentCode", user.DepartmentId);
+            ViewData["DepartmentId"] = new SelectList(_context.Set<Department>(), "DepartmentId", "DepartmentName", user.DepartmentId);
             return View(user);
         }
 

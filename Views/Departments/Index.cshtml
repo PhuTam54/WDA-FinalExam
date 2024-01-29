@@ -75,6 +75,7 @@
                                         <th>Code</th>
                                         <th>Employees</th>
                                         <th>Location</th>
+                                        <th></th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -140,7 +141,7 @@
                                                                                     @member.Rank
                                                                                 </td>
                                                                                 <td>
-                                                                                    <a href="/Departments/Details/@member.ID" class="btn btn-secondary btn-sm">
+                                                                                    <a href="/Users/Details/@member.ID" class="btn btn-secondary btn-sm">
                                                                                         <i class="fas fa-eye">
                                                                                         </i>
                                                                                         Details
@@ -163,6 +164,91 @@
                                             <td>
                                                 @item.Location
                                             </td>
+
+                                            <td>
+                                                <!-- Trigger the modal with a button -->
+                                                <a type="button" class="text text-info text-md" data-toggle="modal" data-target="#showMember-@item.DepartmentId">
+                                                    <i class="fa fa-plus"></i>
+                                                    Add a Employee
+                                                </a>
+
+                                                <!-- Modal -->
+                                                <div id="showMember-@item.DepartmentId" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+
+                                                        <!-- Modal content-->
+                                                        <div class="modal-content" style="min-width: 700px; max-height: 600px">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">All Members are not in any Department</h4>
+                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            </div>
+                                                            <div class="modal-body overflow-auto">
+                                                                <table class="table table-bordered table-striped">
+                                                                    @{
+                                                                        var indexEmployee = 0;
+                                                                    }
+                                                                    <tr>
+                                                                        <th>No.</th>
+                                                                        <th>Fullname</th>
+                                                                        <th>Rank</th>
+                                                                        <th colspan="2">Action</th>
+                                                                    </tr>
+
+                                                                    @if(Model.Users.Count() > 0)
+                                                                    {
+                                                                        
+                                                                    @foreach (var member in Model.Users)
+                                                                    {
+                                                                        indexEmployee++;
+                                                                        <tr>
+                                                                            <td>
+                                                                                @indexEmployee
+                                                                            </td>
+                                                                            <td>
+                                                                                @member.FullName
+                                                                            </td>
+                                                                            <td>
+                                                                                @member.Rank
+                                                                            </td>
+                                                                            <td>
+                                                                                <form asp-action="AddEmployee" method="post">
+                                                                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                                                                    <input type="hidden" name="DepartmentId" value="@item.DepartmentId" />
+                                                                                    <input type="hidden" name="ID" value="@member.ID" />
+                                                                                    <input type="hidden" name="EmployeeCode" value="@member.EmployeeCode" />
+                                                                                    <input type="hidden" name="Rank" value="@member.Rank" />
+                                                                                    <input type="hidden" name="Avatar" value="@member.Avatar" />
+                                                                                    <input type="hidden" name="LastName" value="@member.LastName" />
+                                                                                    <input type="hidden" name="FirstMidName" value="@member.FirstMidName" />
+                                                                                    <button type="submit" class="btn btn-success btn-sm">
+                                                                                        <i class="fas fa-plus"></i>
+                                                                                        Add
+                                                                                    </button>
+                                                                                </form>
+
+                                                                            </td>
+                                                                        </tr>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <tr>
+                                                                            <th colspan="5">
+                                                                                <p class="text text-center">There is no member to add</p>
+                                                                            </th>
+                                                                        </tr>
+                                                                    }
+                                                                </table>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </td>
+
                                             <td>
                                                 <a asp-action="Details" asp-route-id="@item.DepartmentId" class="btn btn-secondary btn-sm">
                                                     <i class="fas fa-eye">
